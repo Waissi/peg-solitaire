@@ -6,7 +6,7 @@ from peg import Peg
 
 
 def is_colliding(pegPos: Vector2, mousePos: Vector2) -> bool:
-    """Compares distance between mouse position and the center of the slot from the slot's radius"""
+    """Compares distance from mouse position to the center of the slot with the slot's radius"""
     return pegPos.distance_to(mousePos) <= macros.PEG_RADIUS
 
 
