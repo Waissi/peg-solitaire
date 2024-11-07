@@ -24,7 +24,7 @@ class Slot():
         self.peg = Peg()
 
     def on_resize(self) -> None:
-        """Changes slot position accroding to new window's size"""
+        """Changes slot position according to new window's size"""
         self.drawPos = Vector2(macros.EDGE.x + (self.pos.x - 1) * macros.SLOT_GAP,
                                macros.EDGE.y + (self.pos.y - 1) * macros.SLOT_GAP)
 
