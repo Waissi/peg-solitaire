@@ -28,9 +28,7 @@ class Peg():
     def draw(self, screen: Surface, drawPos: Vector2) -> None:
         """Draws peg on screen and a surrounding circle when hovered or selected"""
         pygame.draw.circle(screen, colors.BLACK, drawPos, macros.PEG_RADIUS)
-        if self.state == PegState.IDLE:
-            return
-        elif self.state == PegState.SELECTED:
+        if self.state == PegState.SELECTED:
             pygame.draw.circle(screen, colors.YELLOW,
                                drawPos, macros.PEG_RADIUS + 2, macros.SELECTION_RADIUS)
         elif self.state == PegState.HOVER:
