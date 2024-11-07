@@ -33,7 +33,6 @@ class Peg():
         elif self.state == PegState.SELECTED:
             pygame.draw.circle(screen, colors.YELLOW,
                                drawPos, macros.PEG_RADIUS + 2, macros.SELECTION_RADIUS)
-            return
-        if self.state == PegState.HOVER:
+        elif self.state == PegState.HOVER:
             pygame.draw.circle(screen, colors.GREY,
                                drawPos, macros.PEG_RADIUS + 2, macros.SELECTION_RADIUS)
