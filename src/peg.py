@@ -15,15 +15,18 @@ class Peg():
     def __init__(self):
         self.state = PegState.IDLE
 
-    def select(self, hover: bool):
+    def select(self, hover: bool) -> None:
+        """Changes peg state"""
         self.state = PegState.SELECTED if hover else PegState.IDLE
 
-    def hover(self, hover: bool):
+    def hover(self, hover: bool) -> None:
+        """Changes peg state"""
         if self.state == PegState.SELECTED:
             return
         self.state = PegState.HOVER if hover else PegState.IDLE
 
-    def draw(self, screen: Surface, drawPos: Vector2):
+    def draw(self, screen: Surface, drawPos: Vector2) -> None:
+        """Draws peg on screen and a surrounding circle when hovered or selected"""
         pygame.draw.circle(screen, colors.BLACK, drawPos, macros.PEG_RADIUS)
         if self.state == PegState.IDLE:
             return
