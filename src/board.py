@@ -1,6 +1,6 @@
 from typing import List, Optional
 from pygame import Surface, Vector2
-from slot import Slot
+from slot import *
 
 
 BLANK = [
@@ -24,44 +24,44 @@ class Board():
                 if not (i, j) in BLANK:
                     self.grid.append(Slot(i, j))
         # Central slot is empty
-        self.grid[16].empty()
+        empty_slot(self.grid[16])
 
-    def on_resize(self) -> None:
-        """Resizes slots and pegs"""
-        for slot in self.grid:
-            slot.on_resize()
+def resize_board(board: Board) -> None:
+    """Resizes slots and pegs"""
+    for slot in board.grid:
+        resize_slot(slot)
 
-    def check_victory(self) -> bool:
-        """Players wins if only peg remains"""
-        count = 0
-        for slot in self.grid:
-            if slot.peg:
-                count += 1
-        return count == 1
+def check_victory(board: Board) -> bool:
+    """Players wins if only peg remains"""
+    count = 0
+    for slot in board.grid:
+        if slot.peg:
+            count += 1
+    return count == 1
 
-    def get_slot(self, pos: Vector2) -> Slot:
-        """Returns slot given a grid position"""
-        for slot in self.grid:
-            if slot.pos == pos:
-                return slot
+def get_slot_on_board(board: Board, pos: Vector2) -> Slot:
+    """Returns slot given a grid position"""
+    for slot in board.grid:
+        if slot.pos == pos:
+            return slot
 
-    def check_mouse_position(self, mousePos: Vector2) -> bool:
-        """Checks mouse pos on every slot"""
-        hover = False
-        for slot in self.grid:
-            if slot.check_mouse_position(mousePos):
-                hover = True
-        return hover
+def check_mouse_position_on_board(board: Board, mousePos: Vector2) -> bool:
+    """Checks mouse pos on every slot"""
+    hover = False
+    for slot in board.grid:
+        if check_mouse_position_on_slot(slot, mousePos):
+            hover = True
+    return hover
 
-    def check_mouse_input(self, mousePos: Vector2) -> Optional[Slot]:
-        """Checks mouse input on every slot"""
-        clickedSlot = None
-        for slot in self.grid:
-            if slot.check_mouse_input(mousePos):
-                clickedSlot = slot
-        return clickedSlot
+def check_mouse_input_on_board(board: Board, mousePos: Vector2) -> Optional[Slot]:
+    """Checks mouse input on every slot"""
+    clickedSlot = None
+    for slot in board.grid:
+        if check_mouse_input_on_slot(slot, mousePos):
+            clickedSlot = slot
+    return clickedSlot
 
-    def draw(self, screen: Surface) -> None:
-        """Draws every slots"""
-        for slot in self.grid:
-            slot.draw(screen)
+def draw_board(board: Board, screen: Surface) -> None:
+    """Draws every slots"""
+    for slot in board.grid:
+        draw_slot(slot, screen)

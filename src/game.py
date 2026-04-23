@@ -1,9 +1,9 @@
-from typing import Optional
 import pygame
 from pygame import Surface, Vector2
-from board import Board
-from slot import Slot
-from text import Text
+from typing import Optional
+from board import *
+from slot import *
+from text import *
 
 mousePos = Vector2()
 arrow = pygame.SYSTEM_CURSOR_ARROW
@@ -47,52 +47,52 @@ class Game():
         self.selectedSlot: Slot = None
         self.victoryText = Text('You Win!')
 
-    def on_resize(self) -> None:
-        """Resize game elements to new window size"""
-        self.victoryText.on_resize()
-        self.board.on_resize()
+def resize_game(game: Game) -> None:
+    """Resize game elements to new window size"""
+    resize_text(game.victoryText)
+    resize_board(game.board)
 
-    def update(self) -> None:
-        """Tracks mouse movement"""
-        mousePos.x, mousePos.y = Vector2(pygame.mouse.get_pos())
-        hover = self.board.check_mouse_position(mousePos)
-        cursor = hand if hover else arrow
-        pygame.mouse.set_cursor(cursor)
+def update_game(game: Game) -> None:
+    """Tracks mouse movement"""
+    mousePos.x, mousePos.y = Vector2(pygame.mouse.get_pos())
+    hover = check_mouse_position_on_board(game.board, mousePos)
+    cursor = hand if hover else arrow
+    pygame.mouse.set_cursor(cursor)
 
-    def check_mouse_input(self) -> Optional[bool]:
-        """Handle user's mouse input"""
-        slot = self.board.check_mouse_input(mousePos)
-        if not slot:
-            self.selectedSlot = None
-            return
-        if self.selectedSlot:
-            if not slot.is_empty():
-                self.selectedSlot = slot
-                return
-
-            # Middle peg should be removed from board
-            middleSlotPos = get_middle_slot_pos(self.selectedSlot, slot)
-            if not middleSlotPos:
-                self.selectedSlot = None
-                return
-            middleSlot = self.board.get_slot(middleSlotPos)
-            if middleSlot.is_empty():
-                self.selectedSlot = None
-                return
-            middleSlot.empty()
-            peg = self.selectedSlot.peg
-            self.selectedSlot.empty()
-            slot.populate(peg)
-            if self.board.check_victory():
-                return True
-            return
-        if slot.is_empty():
-            return
-        self.selectedSlot = slot
+def check_mouse_input(game: Game) -> Optional[bool]:
+    """Handle user's mouse input"""
+    slot = check_mouse_input_on_board(game.board, mousePos)
+    if not slot:
+        game.selectedSlot = None
         return
+    if game.selectedSlot:
+        if not is_slot_empty(slot):
+            game.selectedSlot = slot
+            return
 
-    def draw(self, screen: Surface, victory: bool) -> None:
-        """Draws game elements and displays 'You win!' if player wins"""
-        self.board.draw(screen)
-        if victory:
-            self.victoryText.draw(screen)
+        # Middle peg should be removed from board
+        middleSlotPos = get_middle_slot_pos(game.selectedSlot, slot)
+        if not middleSlotPos:
+            game.selectedSlot = None
+            return
+        middleSlot = get_slot_on_board(game.board, middleSlotPos)
+        if is_slot_empty(middleSlot):
+            game.selectedSlot = None
+            return
+        empty_slot(middleSlot)
+        peg = game.selectedSlot.peg
+        empty_slot(game.selectedSlot)
+        populate_slot(slot, peg)
+        if check_victory(game.board):
+            return True
+        return
+    if is_slot_empty(slot):
+        return
+    game.selectedSlot = slot
+    return
+
+def draw_game(game: Game, screen: Surface, victory: bool) -> None:
+    """Draws game elements and displays 'You win!' if player wins"""
+    draw_board(game.board, screen)
+    if victory:
+        draw_text(game.victoryText, screen)

@@ -1,12 +1,12 @@
 import pygame
 import colors
-import macros
-from game import Game
+from macros import *
+from game import *
 
 
 def run():
     """
-    Initializes PyGame and variables, then runs the main game loop:\n    
+    Initializes PyGame and variables, then runs the main game loop:\n
     1/ listen to events\n
     2/ update the game\n
     3/ draw the game\n
@@ -15,7 +15,7 @@ def run():
 
     ####    INIT    ####
     pygame.init()
-    screen = pygame.display.set_mode(macros.WINDOW_SIZE, pygame.RESIZABLE)
+    screen = pygame.display.set_mode(WINDOW_SIZE, pygame.RESIZABLE)
     pygame.display.set_caption("Peg Solitaire")
     clock = pygame.time.Clock()
     running = True
@@ -31,24 +31,24 @@ def run():
                 running = False
             elif event.type == pygame.VIDEORESIZE:
                 # Resize all game elements when window is resized
-                macros.on_resize()
-                game.on_resize()
+                on_resize()
+                resize_game(game)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if victory:
                     game = Game()
                     victory = False
                 else:
-                    victory = game.check_mouse_input()
+                    victory = check_mouse_input(game)
         #####################
 
         ####    UPDATE  ###
         if not victory:
-            game.update()
+            update_game(game)
         ###################
 
         ####    DRAW    ####
         screen.fill(color=colors.BROWN)
-        game.draw(screen, victory)
+        draw_game(game, screen, victory)
         pygame.display.flip()
         ####################
 
